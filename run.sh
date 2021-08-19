@@ -42,4 +42,5 @@ run_ssh "podman run \
             -v "${JENKINS_HOME_DIR}/workspace/${JOB_DIR}":${WORKSPACE}:rw \
             -v /opt/:/opt/:ro \
             -v "${JENKINS_HOME_DIR}/.ssh/":/var/jenkins_home/.ssh/:ro \
+            -v "${JENKINS_HOME_DIR}/.gitconfig":/var/jenkins_home/.gitconfig:ro \
 	        -d ${BUILD_PODMAN_IMAGE} '${CONTAINER_COMMAND}'"
