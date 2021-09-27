@@ -52,10 +52,10 @@ if [ -n "${HARMONIA_SCRIPT}" ]; then
 
   if [ "${HARMONIA_DEBUG}" ]; then
     # shellcheck disable=SC2086
-    bash -x "${HARMONIA_HOME}/${HARMONIA_SCRIPT}" ${BUILD_COMMAND} 2>&1 | tee "${HERA_HOME}/build_${BUILD_ID}.log"
+    bash -x "${HARMONIA_HOME}/${HARMONIA_SCRIPT}" ${BUILD_COMMAND} | tee "${HERA_HOME}/build_${BUILD_ID}.log"
   else
     # shellcheck disable=SC2086
-    "${HARMONIA_HOME}/${HARMONIA_SCRIPT}" ${BUILD_COMMAND} 2>&1 | tee "${HERA_HOME}/build_${BUILD_ID}.log"
+    "${HARMONIA_HOME}/${HARMONIA_SCRIPT}" ${BUILD_COMMAND} | tee "${HERA_HOME}/build_${BUILD_ID}.log"
   fi
 else
   cd "${WORKSPACE}" || exit "${FAIL_TO_SET_DEFAULT_TO_WORKSPACE_CODE}"
