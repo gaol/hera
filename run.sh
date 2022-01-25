@@ -56,6 +56,13 @@ run_ssh "podman run \
 echo -e "inside /etc/tuned:"
 run_ssh "tree /etc/tuned/"
 
+echo -e "main conf: "
+run_ssh "cat /etc/tuned/tuned-main.conf"
+
+echo -e "active profile"
+run_ssh "cat /etc/tuned/active_profile"
+
+
 echo -e "list of tuned-adm"
 run_ssh "tuned-adm list"
 
