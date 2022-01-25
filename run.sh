@@ -31,6 +31,7 @@ readonly CONTAINER_COMMAND=${CONTAINER_COMMAND:-"${WORKSPACE}/hera/wait.sh"}
 # shellcheck disable=SC2016
 run_ssh "podman run \
             --name "${CONTAINER_TO_RUN_NAME}" \
+            --memory 2g \
              --add-host=${CONTAINER_SERVER_HOSTNAME}:${CONTAINER_SERVER_IP}  \
             --rm $(add_parent_volume_if_provided) \
             --workdir ${JENKINS_HOME_DIR}/jobs/${JOB_NAME}/workspace \
