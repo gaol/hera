@@ -68,3 +68,6 @@ run_ssh "tuned-adm list"
 
 echo -e "active profile"
 run_ssh "tuned-adm active"
+
+echo -e "sysctl conf"
+run_ssh "tree /etc/sysctl.d/"
