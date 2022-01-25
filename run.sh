@@ -52,3 +52,12 @@ run_ssh "podman run \
             -v "${JENKINS_ACCOUNT_DIR}/.gitconfig":/var/jenkins_home/.gitconfig:ro \
             -v "${JENKINS_ACCOUNT_DIR}/.netrc":/var/jenkins_home/.netrc:ro \
 	        -d ${BUILD_PODMAN_IMAGE} '${CONTAINER_COMMAND}'"
+
+echo -e "inside /etc/tuned:"
+run_ssh "tree /etc/tuned/"
+
+echo -e "list of tuned-adm"
+run_ssh "tuned-adm list"
+
+echo -e "active profile"
+run_ssh "tuned-adm active"
