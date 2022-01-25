@@ -55,3 +55,11 @@ run_ssh "podman exec \
         -e GIT_REPOSITORY_URL="${GIT_REPOSITORY_URL}" \
         -e GIT_REPOSITORY_BRANCH="${GIT_REPOSITORY_BRANCH}" \
         -ti ${CONTAINER_NAME} '${BUILD_SCRIPT}' ${@}"
+
+
+sleep 30
+
+echo -e "Logs \n\n ==================== \n\n"
+run_ssh "podman logs ${CONTAINER_NAME}"
+echo -e "\n\n Inspect \n\n ==================== \n\n"
+run_ssh "podman inspect ${CONTAINER_NAME}"
