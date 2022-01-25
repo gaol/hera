@@ -71,3 +71,9 @@ run_ssh "tuned-adm active"
 
 echo -e "sysctl conf"
 run_ssh "tree /etc/sysctl.d/"
+
+echo -e "files content of userns.conf:"
+run_ssh "cat /etc/sysctl.d/userns.conf"
+
+echo -e "/etc/sysctl.conf:"
+run_ssh "cat /etc/sysctl.conf"
