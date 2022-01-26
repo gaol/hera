@@ -77,3 +77,6 @@ run_ssh "cat /etc/sysctl.d/userns.conf"
 
 echo -e "/etc/sysctl.conf:"
 run_ssh "cat /etc/sysctl.conf"
+
+echo -e "version of podman"
+run_ssh "rpm -qif `which podman`"
