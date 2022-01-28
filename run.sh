@@ -62,7 +62,6 @@ run_ssh "cat /etc/tuned/tuned-main.conf"
 echo -e "active profile"
 run_ssh "cat /etc/tuned/active_profile"
 
-
 echo -e "list of tuned-adm"
 run_ssh "tuned-adm list"
 
@@ -80,3 +79,12 @@ run_ssh "cat /etc/sysctl.conf"
 
 echo -e "version of podman"
 run_ssh "rpm -qif /usr/bin/podman"
+
+echo -e "podman registries.conf:"
+run_ssh "cat /etc/containers/registries.conf"
+
+echo -e "Indie /sys/fs/cgroup/"
+run_ssh "tree /sys/fs/cgroup/"
+
+echo -e "Ulimit -a:"
+run_ssh "ulimit -a"
