@@ -41,7 +41,7 @@ readonly CONTAINER_COMMAND=${CONTAINER_COMMAND:-"${WORKSPACE}/hera/wait.sh"}
 
 # shellcheck disable=SC2016
 run_ssh "podman run \
-            --userns=keep-id -u ${JENKINS_UID}:${JENKINS_GUID} \
+            -u ${JENKINS_UID}:${JENKINS_GUID} \
             --name "${CONTAINER_TO_RUN_NAME}" \
              --add-host=${CONTAINER_SERVER_HOSTNAME}:${CONTAINER_SERVER_IP}  \
             --rm $(add_parent_volume_if_provided) \
@@ -83,8 +83,6 @@ run_ssh "rpm -qif /usr/bin/podman"
 echo -e "podman registries.conf:"
 run_ssh "cat /etc/containers/registries.conf"
 
-echo -e "Indie /sys/fs/cgroup/"
-run_ssh "tree /sys/fs/cgroup/"
-
 echo -e "Ulimit -a:"
 run_ssh "ulimit -a"
+
