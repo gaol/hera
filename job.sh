@@ -29,12 +29,18 @@ dumpBuildEnv "${HERA_HOME}/build-env.sh"
 
 env_file_if_enabled() {
   if [ -n "${ENV_FILE}" ]; then
-    echo "--env-file=${ENV_FILE}"
+#    echo "--env-file=${ENV_FILE}"
+    grep -v '^ *#' < "${ENV_FILE}" | while IFS= read -r line
+    do
+      echo "-e $line \\"
+    done
   fi
 }
 
+env_file_if_enabled
+
 set +u
-run_ssh "pwd && ls -l && podman exec $(env_file_if_enabled) \
+run_ssh "podman exec $(env_file_if_enabled) \
         -e LANG='en_US.utf8' \
         -e JOB_NAME="${JOB_NAME}" \
         -e PARENT_JOB_NAME="${PARENT_JOB_NAME}" \
