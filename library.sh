@@ -81,6 +81,8 @@ run_ssh() {
   is_defined "${HERA_HOSTNAME}" 'Please define env var HERA_HOSTNAME.' 668
   is_defined "${HERA_USERNAME}" 'Please define env var HERA_USERNAME' 669
 
+  echo "command to run: "
+  echo "${@}"
   # shellcheck disable=SC2086,SC2029
   ssh ${ssh_options} \
       "${HERA_USERNAME}@${HERA_HOSTNAME}"\
