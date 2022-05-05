@@ -31,13 +31,13 @@ env_file_if_enabled() {
   if [ -n "${ENV_FILE}" ]; then
     grep -v '^ *#' < "${ENV_FILE}" | while IFS= read -r line
     do
-      echo "-e $line \\"
+      echo "-e $line "
     done
   fi
 }
 
 set +u
-run_ssh "podman exec \ $(env_file_if_enabled)
+run_ssh "podman exec $(env_file_if_enabled) \
         -e LANG='en_US.utf8' \
         -e JOB_NAME="${JOB_NAME}" \
         -e PARENT_JOB_NAME="${PARENT_JOB_NAME}" \
