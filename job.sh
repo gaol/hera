@@ -38,6 +38,9 @@ env_file_if_enabled() {
   fi
 }
 
+echo "==========  debug info ==============="
+env_file_if_enabled
+
 set +u
 run_ssh "podman exec $(env_file_if_enabled) \
         -e LANG='en_US.utf8' \
