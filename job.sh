@@ -1,5 +1,6 @@
 #!/bin/bash
 readonly BUILD_SCRIPT=${BUILD_SCRIPT:-'1'}
+readonly ENV_FILE=$1
 shift
 
 # shellcheck source=library.sh
@@ -26,8 +27,14 @@ readonly CONTAINER_NAME=$(container_name "${JOB_NAME}" "${BUILD_ID}")
 
 dumpBuildEnv "${HERA_HOME}/build-env.sh"
 
+env_file_if_enabled() {
+  if [ -n "${ENV_FILE}" ]; then
+    echo "--env-file=${ENV_FILE}"
+  fi
+}
+
 set +u
-run_ssh "podman exec \
+run_ssh "podman exec $(env_file_if_enabled) \
         -e LANG='en_US.utf8' \
         -e JOB_NAME="${JOB_NAME}" \
         -e PARENT_JOB_NAME="${PARENT_JOB_NAME}" \
