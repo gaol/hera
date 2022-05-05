@@ -32,9 +32,9 @@ env_file_if_enabled() {
     env_lines=""
     grep -v '^ *#' < "${ENV_FILE}" | while IFS= read -r line
     do
-      env_lines="${env_lines} -e $line"
+      env_lines+=" -e $line"
     done
-    echo "${env_lines}"
+    echo "env lines: ${env_lines}"
   fi
 }
 
