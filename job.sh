@@ -74,6 +74,5 @@ run_ssh "podman exec $(env_file_if_enabled) \
         -e TOOLS_MOUNT="${TOOLS_MOUNT}" \
         -e BUILD_MOLECULE_SLAVE_SSHD_PORT="${BUILD_MOLECULE_SLAVE_SSHD_PORT}" \
         -e PROJECT_DOWNSTREAM_NAME="${PROJECT_DOWNSTREAM_NAME}" \
-        -e TESTSUITE_OPTS="${TESTSUITE_OPTS}" \
         -ti ${CONTAINER_NAME} '${BUILD_SCRIPT}' ${@}" | removeColorsControlCharactersFromOutput
 exit "${PIPESTATUS[0]}"
