@@ -30,10 +30,10 @@ dumpBuildEnv "${HERA_HOME}/build-env.sh"
 env_file_if_enabled() {
   if [ -n "${ENV_FILE}" ]; then
     env_lines=""
-    # shellcheck disable=SC2013
-    for line in $(cat "${ENV_FILE}"); do
+    while IFS= read -r line
+    do
       env_lines+=" -e $line"
-    done
+    done < <(grep -v '^ *#' < "${ENV_FILE}")
     echo "${env_lines}"
   fi
 }
