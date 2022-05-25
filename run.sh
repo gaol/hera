@@ -19,6 +19,7 @@ readonly PUBLISHED_PORTS=${PUBLISHED_PORTS:-''}
 readonly PRIVILEGED_ENABLED=${PRIVILEGED_ENABLED:-''}
 readonly SYSTEMD_ENABLED=${SYSTEMD_ENABLED:-''}
 readonly CGROUP_MOUNT_ENABLED=${CGROUP_MOUNT_ENABLED:-''}
+readonly CGROUP_NS_PRIVATE=${CGROUP_NS_PRIVATE:-''}
 
 set -euo pipefail
 
@@ -54,6 +55,12 @@ systemd_if_enabled() {
 cgroup_mount_if_enabled() {
   if [ -n "${CGROUP_MOUNT_ENABLED}" ]; then
     echo "-v /sys/fs/cgroup:/sys/fs/cgroup:ro"
+  fi
+}
+
+cgroup_ns_private_if_enabled() {
+  if [ -n "${CGROUP_NS_PRIVATE}" ]; then
+    echo "--cgroupns=private"
   fi
 }
 
@@ -95,7 +102,7 @@ readonly CONTAINER_COMMAND=${CONTAINER_COMMAND:-"${WORKSPACE}/hera/wait.sh"}
 
 # shellcheck disable=SC2016
 run_ssh "podman run \
-            --name "${CONTAINER_TO_RUN_NAME}" $(container_user_if_enabled) \
+            --name "${CONTAINER_TO_RUN_NAME}" $(container_user_if_enabled) $(cgroup_ns_private_if_enabled) \
             --add-host=${CONTAINER_SERVER_HOSTNAME}:${CONTAINER_SERVER_IP}  \
             --rm $(add_parent_volume_if_provided) $(privileged_if_enabled) $(systemd_if_enabled) $(cgroup_mount_if_enabled) \
             --workdir ${WORKSPACE} $(add_ports_if_provided) \
