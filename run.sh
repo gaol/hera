@@ -105,16 +105,16 @@ readonly CONTAINER_TO_RUN_NAME=${CONTAINER_TO_RUN_NAME:-$(container_name "${JOB_
 readonly CONTAINER_COMMAND=${CONTAINER_COMMAND:-"${WORKSPACE}/hera/wait.sh"}
 
 # shellcheck disable=SC2016
-run_ssh "podman run $(env_file_if_enabled) \
+run_ssh "podman run \
             --name "${CONTAINER_TO_RUN_NAME}" $(container_user_if_enabled) \
             --add-host=${CONTAINER_SERVER_HOSTNAME}:${CONTAINER_SERVER_IP}  \
             --rm $(add_parent_volume_if_provided) $(privileged_if_enabled) $(systemd_if_enabled) $(cgroup_mount_if_enabled) \
             --workdir ${WORKSPACE} $(add_ports_if_provided) \
-            -v "${JOB_DIR}":${WORKSPACE}:rw $(mount_tools_if_provided)\
+            -v "${JOB_DIR}":${WORKSPACE}:rw $(mount_tools_if_provided) \
             -v "${JENKINS_ACCOUNT_DIR}/.ssh/":/var/jenkins_home/.ssh/:ro \
             -v "${JENKINS_ACCOUNT_DIR}/.gitconfig":/var/jenkins_home/.gitconfig:ro \
             -v "${JENKINS_ACCOUNT_DIR}/.netrc":/var/jenkins_home/.netrc:ro \
-            -e LANG='en_US.utf8' \
+            -e LANG='en_US.utf8' $(env_file_if_enabled) \
             -e JOB_NAME="${JOB_NAME}" \
             -e PARENT_JOB_NAME="${PARENT_JOB_NAME}" \
             -e PARENT_JOB_BUILD_ID="${PARENT_JOB_BUILD_ID}" \
