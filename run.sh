@@ -19,8 +19,19 @@ readonly PUBLISHED_PORTS=${PUBLISHED_PORTS:-''}
 readonly PRIVILEGED_ENABLED=${PRIVILEGED_ENABLED:-''}
 readonly SYSTEMD_ENABLED=${SYSTEMD_ENABLED:-''}
 readonly CGROUP_MOUNT_ENABLED=${CGROUP_MOUNT_ENABLED:-''}
-
+readonly ENV_FILE=$1
 set -euo pipefail
+
+env_file_if_enabled() {
+  if [ -n "${ENV_FILE}" ]; then
+    env_lines=""
+    while IFS= read -r line
+    do
+      env_lines+=" -e $line"
+    done < <(grep -v '^ *#' < "${ENV_FILE}")
+    echo "${env_lines}"
+  fi
+}
 
 add_parent_volume_if_provided() {
   if [ -n "${PARENT_JOB_NAME}" ]; then
@@ -94,7 +105,7 @@ readonly CONTAINER_TO_RUN_NAME=${CONTAINER_TO_RUN_NAME:-$(container_name "${JOB_
 readonly CONTAINER_COMMAND=${CONTAINER_COMMAND:-"${WORKSPACE}/hera/wait.sh"}
 
 # shellcheck disable=SC2016
-run_ssh "podman run \
+run_ssh "podman run $(env_file_if_enabled) \
             --name "${CONTAINER_TO_RUN_NAME}" $(container_user_if_enabled) \
             --add-host=${CONTAINER_SERVER_HOSTNAME}:${CONTAINER_SERVER_IP}  \
             --rm $(add_parent_volume_if_provided) $(privileged_if_enabled) $(systemd_if_enabled) $(cgroup_mount_if_enabled) \
@@ -103,4 +114,17 @@ run_ssh "podman run \
             -v "${JENKINS_ACCOUNT_DIR}/.ssh/":/var/jenkins_home/.ssh/:ro \
             -v "${JENKINS_ACCOUNT_DIR}/.gitconfig":/var/jenkins_home/.gitconfig:ro \
             -v "${JENKINS_ACCOUNT_DIR}/.netrc":/var/jenkins_home/.netrc:ro \
-            -d ${BUILD_PODMAN_IMAGE} '${CONTAINER_COMMAND}'"
+            -e LANG='en_US.utf8' \
+            -e JOB_NAME="${JOB_NAME}" \
+            -e PARENT_JOB_NAME="${PARENT_JOB_NAME}" \
+            -e PARENT_JOB_BUILD_ID="${PARENT_JOB_BUILD_ID}" \
+            -e WORKSPACE="${WORKSPACE}" \
+            -e WORKDIR="${WORKDIR}" \
+            -e HARMONIA_SCRIPT="${HARMONIA_SCRIPT}" \
+            -e DEBUG="${DEBUG}" \
+            -e BUILD_ID="${BUILD_ID}" \
+            -e BUILD_COMMAND="${BUILD_COMMAND}" \
+            -e COPY_ARTIFACTS="${COPY_ARTIFACTS}" \
+            -e RERUN_FAILING_TESTS="${RERUN_FAILING_TESTS}" \
+            -ti ${BUILD_PODMAN_IMAGE} '${BUILD_SCRIPT}' ${@}"  | removeColorsControlCharactersFromOutput
+exit "${PIPESTATUS[0]}"
