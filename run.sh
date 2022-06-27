@@ -126,5 +126,5 @@ run_ssh "podman run \
             -e BUILD_COMMAND="${BUILD_COMMAND}" \
             -e COPY_ARTIFACTS="${COPY_ARTIFACTS}" \
             -e RERUN_FAILING_TESTS="${RERUN_FAILING_TESTS}" \
-            -ti ${BUILD_PODMAN_IMAGE} '${BUILD_SCRIPT}' ${@}"  | removeColorsControlCharactersFromOutput
+            -ti ${BUILD_PODMAN_IMAGE} '${BUILD_SCRIPT}' "  | removeColorsControlCharactersFromOutput
 exit "${PIPESTATUS[0]}"
