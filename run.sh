@@ -104,6 +104,7 @@ readonly JOB_DIR=$(echo "${WORKSPACE}" | sed -e "s;/var/jenkins_home/;${JENKINS_
 readonly CONTAINER_TO_RUN_NAME=${CONTAINER_TO_RUN_NAME:-$(container_name "${JOB_NAME}" "${BUILD_ID}")}
 readonly CONTAINER_COMMAND=${CONTAINER_COMMAND:-"${WORKSPACE}/hera/wait.sh"}
 
+set +u
 # shellcheck disable=SC2016
 run_ssh "podman run \
             --name "${CONTAINER_TO_RUN_NAME}" $(container_user_if_enabled) \
