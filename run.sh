@@ -109,12 +109,10 @@ grep cgroup /proc/filesystems
 
 uname -a
 
-ls -lah ${JENKINS_ACCOUNT_DIR}
-
 
 
 # shellcheck disable=SC2016
-run_ssh "podman run \
+run_ssh "podman run --cpus 4 --memory 4g \
             --name "${CONTAINER_TO_RUN_NAME}" $(container_user_if_enabled) \
             --add-host=${CONTAINER_SERVER_HOSTNAME}:${CONTAINER_SERVER_IP}  \
             --rm $(add_parent_volume_if_provided) $(privileged_if_enabled) $(systemd_if_enabled) $(cgroup_mount_if_enabled) $(add_jenkins_jobs_volume_if_requested) \
