@@ -22,7 +22,7 @@ readonly CGROUP_MOUNT_ENABLED=${CGROUP_MOUNT_ENABLED:-''}
 readonly JENKINS_JOBS_VOLUME_ENABLED=${JENKINS_JOBS_VOLUME_ENABLED}
 readonly JENKINS_JOBS_VOLUME=${JENKINS_JOBS_VOLUME:-'/jenkins_jobs'}
 
-set -euo pipefail
+set -exuo pipefail
 
 add_parent_volume_if_provided() {
   if [ -n "${PARENT_JOB_NAME}" ]; then
@@ -100,6 +100,18 @@ is_defined "${CONTAINER_SERVER_IP}" 'No IP address provided for the container se
 readonly JOB_DIR=$(echo "${WORKSPACE}" | sed -e "s;/var/jenkins_home/;${JENKINS_HOME_DIR};")
 readonly CONTAINER_TO_RUN_NAME=${CONTAINER_TO_RUN_NAME:-$(container_name "${JOB_NAME}" "${BUILD_ID}")}
 readonly CONTAINER_COMMAND=${CONTAINER_COMMAND:-"${WORKSPACE}/hera/wait.sh"}
+
+echo -e "Here I start the script in host !! "
+
+ls -lah /
+
+grep cgroup /proc/filesystems
+
+uname -a
+
+ls -lah ${JENKINS_ACCOUNT_DIR}
+
+
 
 # shellcheck disable=SC2016
 run_ssh "podman run \
